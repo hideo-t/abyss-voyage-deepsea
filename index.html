@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>深海への旅: 闇に潜む真実</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a2e;
+      --text-primary: #e0ddd5;
+      --text-secondary: #8a8a9a;
+      --accent: #4a9eff;
+      --accent-dim: #2a5a9a;
+      --gold: #c4a35a;
+      --chapter-border: #2a2a3e;
+      --serif: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
+      --sans: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.95;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 100px 20px 80px;
+      background: linear-gradient(180deg, #1a2a4a 0%, #0f1a2f 100%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(120,180,255,0.15) 0%, transparent 70%);
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #ffffff;
+      text-shadow: 0 2px 20px rgba(100,160,255,0.3);
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .hero-sub {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: #b0c4de;
+      letter-spacing: 0.15em;
+    }
+    .hero-line {
+      width: 60px; height: 1px;
+      background: var(--gold);
+      margin: 28px auto 0;
+    }
+
+    /* ─── Digest Carousel ─── */
+    .carousel-wrap {
+      background: linear-gradient(180deg, #0f1a2f 0%, #0a0e18 100%);
+      padding: 24px 0 20px;
+      overflow: hidden;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 calc((100vw - min(85vw, 600px)) / 2);
+      scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-slide {
+      flex: 0 0 min(85vw, 280px);
+      scroll-snap-align: center;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+      aspect-ratio: 3/2;
+    }
+    .carousel-slide:active { transform: scale(0.97); }
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      padding: 28px 12px 10px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-family: var(--serif);
+      line-height: 1.4;
+    }
+    .carousel-ch {
+      display: inline-block;
+      font-size: 0.7rem;
+      color: var(--gold);
+      margin-right: 6px;
+      font-family: var(--sans);
+      letter-spacing: 0.06em;
+    }
+    .carousel-dots {
+      text-align: center;
+      padding-top: 12px;
+    }
+    .carousel-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      margin: 0 4px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .carousel-dot.active {
+      background: var(--gold);
+      transform: scale(1.3);
+    }
+    @media (min-width: 600px) {
+      .carousel-slide { flex: 0 0 280px; }
+      .carousel-track { padding: 0 calc((100vw - 900px) / 2); gap: 18px; }
+    }
+
+    /* ─── Navigation ─── */
+    .nav-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--chapter-border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      overflow-x: auto;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+    }
+    .nav-bar .nav-title {
+      color: var(--gold);
+      font-weight: 700;
+      white-space: nowrap;
+      margin-right: 8px;
+    }
+    .nav-bar a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .nav-bar a:hover {
+      color: var(--accent);
+      background: rgba(74,158,255,0.1);
+    }
+
+    /* ─── TOC ─── */
+    .toc {
+      max-width: 700px;
+      margin: 60px auto 40px;
+      padding: 0 20px;
+    }
+    .toc h3 {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .toc-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 18px;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-left: 2px solid var(--chapter-border);
+      transition: all 0.25s;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+    }
+    .toc-item:hover {
+      border-color: var(--accent);
+      background: rgba(74,158,255,0.04);
+      padding-left: 24px;
+    }
+    .toc-num {
+      font-size: 0.75rem;
+      color: var(--accent-dim);
+      font-weight: 700;
+      min-width: 20px;
+    }
+
+    /* ─── Characters ─── */
+    .characters {
+      max-width: 700px;
+      margin: 40px auto 60px;
+      padding: 0 20px;
+    }
+    .characters h3 {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .char-card {
+      background: var(--bg-card);
+      border: 1px solid var(--chapter-border);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .char-name {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .char-meta {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .char-meta span {
+      background: rgba(74,158,255,0.1);
+      padding: 1px 8px;
+      border-radius: 4px;
+    }
+    .char-appearance {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 6px;
+      border-left: 2px solid var(--chapter-border);
+      padding-left: 10px;
+    }
+    .char-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ─── Divider ─── */
+    .section-divider {
+      width: 40px; height: 1px;
+      background: var(--chapter-border);
+      margin: 0 auto;
+    }
+
+    /* ─── Chapter ─── */
+    .chapter {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 80px 20px;
+      border-top: 1px solid var(--chapter-border);
+    }
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .chapter-number {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      color: var(--accent-dim);
+      display: block;
+      margin-bottom: 8px;
+    }
+    .chapter-title {
+      font-family: var(--serif);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .chapter-image {
+      margin: 0 -20px 40px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--chapter-border);
+    }
+    .chapter-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.92;
+    }
+    .chapter-body p {
+      margin-bottom: 1.2em;
+      text-indent: 1em;
+      text-align: justify;
+    }
+    .chapter-body p:empty {
+      display: none;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      text-align: center;
+      padding: 60px 20px;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--chapter-border);
+    }
+
+    /* ─── Reading mode toggle ─── */
+    .mode-toggle {
+      position: fixed; bottom: 20px; right: 20px; z-index: 200;
+      background: var(--bg-card);
+      border: 1px solid var(--chapter-border);
+      color: var(--text-secondary);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+
+
+    /* ─── Light mode ─── */
+    body.light {
+      --bg-primary: #f5f0e8;
+      --bg-secondary: #ebe5d9;
+      --bg-card: #fff;
+      --text-primary: #2a2a2a;
+      --text-secondary: #6a6a6a;
+      --chapter-border: #d5cfc3;
+      --accent: #2563eb;
+      --accent-dim: #6b9eff;
+      --gold: #8a6d2b;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 600px) {
+      body { font-size: 15px; }
+      .chapter { padding: 50px 16px; }
+    }
+
+    /* ─── Scroll progress ─── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 200;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      width: 0%;
+      transition: width 0.1s;
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" id="progress"></div>
+
+  <header class="hero">
+    <h1 class="hero-title">深海への旅: 闇に潜む真実</h1>
+    <p class="hero-sub">GENERATED WITH LOCAL AI — LOCAL LLM + STABLE DIFFUSION</p>
+    <div class="hero-line"></div>
+  </header>
+
+  <nav class="nav-bar">
+    <span class="nav-title">目次</span>
+    <a href="#chapter-1">第1章</a><a href="#chapter-2">第2章</a><a href="#chapter-3">第3章</a><a href="#chapter-4">第4章</a><a href="#chapter-5">第5章</a>
+  </nav>
+
+  <div class="toc">
+    <h3>— 目次 —</h3>
+        <a href="#chapter-1" class="toc-item"><span class="toc-num">1</span><span class="toc-label">出航：未知の深層へ</span></a>
+        <a href="#chapter-2" class="toc-item"><span class="toc-num">2</span><span class="toc-label">圧力：壁を突破する覚悟</span></a>
+        <a href="#chapter-3" class="toc-item"><span class="toc-num">3</span><span class="toc-label">生物：深海の異形生物との遭遇</span></a>
+        <a href="#chapter-4" class="toc-item"><span class="toc-num">4</span><span class="toc-label">記憶：過去の深海事故の真相</span></a>
+        <a href="#chapter-5" class="toc-item"><span class="toc-num">5</span><span class="toc-label">帰還：深海の真実と新たな旅立ち</span></a>
+  </div>
+
+  <div class="characters">
+    <h3>— 登場人物 —</h3>
+    <div class="char-grid">
+      <div class="char-card">
+        <div class="char-name">海上士・桜井藍</div>
+        <div class="char-meta"><span>主人公</span><span>28歳</span></div>
+        <div class="char-appearance">短髪で黒い瞳、深海で機能する防水スーツに身を包む。
+左手には高精度センサーを装備したグローブ、右手には信頼する光源「ルミナス・スタッフ」を携える。
+体型は細身で、常に冷静さを保つ表情が特徴。</div>
+        <div class="char-desc">観察力に長け、危機に冷静に対応するリーダータイプ</div>
+      </div>
+      <div class="char-card">
+        <div class="char-name">AIコンパニオン「ケルベロス」</div>
+        <div class="char-meta"><span>サブキャラ</span><span>N/A</span></div>
+        <div class="char-appearance">シルバーのボディに赤いアクセント、二足歩行型AIロボット。
+目は光る青いレンズ、耳のようなセンサーが多数付いている。
+常に船内をパトロールし、桜井をサポートする。</div>
+        <div class="char-desc">論理的で忠実、時に情緒的なサポートを提供</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <main>
+
+    <section class="chapter" id="chapter-1">
+      <div class="chapter-header">
+        <span class="chapter-number">第1章</span>
+        <h2 class="chapter-title">出航：未知の深層へ</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第1章 出航：未知の深層へ</p>
+
+        <p>天の下に広がる薄霧が、船体の上を静かに流れる。桜井の手が鉄製の手すりに触れるたび、冷たい金属の感触が指先に伝わる。船のエンジンが唸り始め、その振動が骨の奥まで響く。上空では太陽が雲の間から黄金の筋を垂れ、海面を斑状に照らし出す。空気は塩とオゾンの香りで充ち、肺に入る瞬間、頭が鋭くするどくなる。甲板の端でケルベロスのシルバーのボディが静かに光る。赤いアクセントが暗闇に反応し、まるで眠りから覚めたかのように微かに震える。</p>
+
+        <p>カウントダウンがビューアに映し出される。60、59、58――。乗組員たちは静かに動き、手袋の金属音が甲板に響く。桜井は息を詰め、耳に響く圧力を感じる。船体がゆっくりと傾き、海への潜航を始める。遠くからサイレンが鳴り響くが、すぐに海の轟音に飲み込まれる。その音は低く、まるで地球の心臓が鼓動を刻むかのようだ。</p>
+
+        <p>「最終警告。5000メートル超過。慎重に進んでください」という声がインターコムから流れる。桜井はその言葉に耳を傾け、手元のセンサーを確認する。画面には深海の圧力計が赤く点滅し、数値が上昇していく。船の底部からは異様な冷気が立ち上り、甲板を覆うように広がる。ケルベロスのレンズが光を捉え、その青い目が深海の闇を凝視する。桜井は手を伸ばし、操作パネルに触れる。その感触は冷たく、でも確かな温もりを帯びていた。</p>
+
+        <p>ケルベロスのボディが赤色に染まる。桜井は進み出し、手を操作パネルに近づける。室内は静寂に包まれ、冷却システムの低音が唯一の音となる。彼女の掌がセンサーに触れ、金属の冷たさが指先に伝わる。その刹那、ケルベロスの目の中で青い光が爆発し、その体が微かに震える。船の窓からは深海の暗闇が広がり、光の粒子が微かに揺らめく。桜井はその光景を見つめ、静かに息を吐く。船はさらに下へと進み、未知の世界への第一歩を踏み出す。ケルベロスの声が低く響く。「ケルベロス、起動。海上士・桜井藍、了解。潜航を開始します。」その声は静かで確かなものだった。</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-2">
+      <div class="chapter-header">
+        <span class="chapter-number">第2章</span>
+        <h2 class="chapter-title">圧力：壁を突破する覚悟</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第2章　圧力：壁を突破する覚悟  </p>
+
+        <p>真っ暗な深みが船体を包み込む。水圧が皮膚を潰すようで、呼吸が浅くなる。ケルベロスの青いレンズが閃き、警報音が船内に響く。-10度の冷気がスーツの内側を這い、唾液が凍る。排水溝から漏れる水音が、何かが壁を叩く振動と重なる。  </p>
+
+        <p>桜井はグローブのセンサーに視線を落とす。圧力計の針が跳ね上がり、赤色のランプが点滅する。10000パスカルを超え、12000パスカルに達する。数値が急上昇する瞬間、船体が歪むような音が耳に届く。ケルベロスが「圧力上昇！ 安全閾値を3000パスカル超過」とアナウンスするが、桜井は動じない。左手のグローブに力を込め、操作盤を押さえつける。  </p>
+
+        <p>水の流れが急変する。船内の空気が歪み、耳の奥に響く。桜井の胸が締め付けられるが、ケルベロスの赤いアクセントが脈打つ。AIが「推進システムを最大出力に」と指示する。桜井は右手でルミナス・スタッフを握り、深海に向かって一歩を踏み出す。  </p>
+
+        <p>周囲の暗闇が膨張する。水圧が肺を押し潰そうとするが、スーツのベントが開き、新鮮な空気が流れ込む。ケルベロスの足音が近づき、光の柱が船内を照らす。桜井は視界の端に浮かぶ謎の生物を捉える。その影はゆっくりと近づき、船体に触れる。  </p>
+
+        <p>圧力計の数値が14000パスカルに達する。桜井の指が操作盤から離れ、ケルベロスが「推進を続行」と声に出さずに伝える。船体が微かに揺れ、深海の生き物が反応する。桜井は左手でセンサーを水中に差し込み、データを収集する。  </p>
+
+        <p>ケルベロスの赤いレンズが船体の亀裂を照らす。桜井は息を殺し、次の一歩を踏み出す。圧力が増すたび、水の色が青から黒へと変化する。船内の空気が静まり、ケルベロスの警告音が唯一の音となる。  </p>
+
+        <p>桜井はルミナス・スタッフを深海に向け、光を放つ。その光が謎の生物に当たる。生物は光に反応し、ゆっくりと引き下がる。圧力計の数値が15000パスカルに達する。桜井はケルベロスの後を追い、船体の奥へと進む。  </p>
+
+        <p>深海の暗闇が再び襲う。圧力が限界に近づき、スーツのセンサーが警告を発する。桜井はケルベロスの赤いアクセントを見つめ、前進する決意を固める。船体が微かに振動し、深海の生き物が再び接近する。  </p>
+
+        <p>桜井は左手のグローブを水中に差し込み、データを収集する。ケルベロスが「推進を続行」と伝える。圧力が16000パスカルに達する。桜井はルミナス・スタッフを握りしめ、深海に向かって光を放つ。  </p>
+
+        <p>暗闇が広がる。圧力が限界を超え、船体が歪む。桜井はケルベロスの後を追い、深海の謎へと一歩を踏み出す。圧力計の数値が17000パスカルを示す。桜井は息を殺し、次の決断を待つ。</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-3">
+      <div class="chapter-header">
+        <span class="chapter-number">第3章</span>
+        <h2 class="chapter-title">生物：深海の異形生物との遭遇</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第3章　生物：深海の異形生物との遭遇</p>
+
+        <p>圧力計が赤い閾値を越える音を響かせる。船内は深海の暗闇に包まれ、唯一の光はハッチ周辺の青白いLEDだけ。金属の臭いが湿った空気と混ざり、体温を下げる風が吹き抜ける。水深は八千メートルを超え、窓ガラスには水滴が流れ落ち、冷たい水滴が肌に触れる。ケルベロスのセンサーが異常値を検出し、船内の警報システムが低いブザー音を立てる。水中の圧力は一気圧の百倍以上で、船体は常に歪み続けている。桜井は手すりにつかまり、ケルベロスのディスプレイに注目する。ディスプレイには、圧力の上昇率が異常な速度で増加していることが表示されている。水中の温度が急速に低下しており、船内の暖房システムがフル稼働している。桜井は手袋のセンサーを確認し、ケルベロスにデータを送る。「圧力計の値を確認する。」と短く言う。ケルベロスのディスプレイには、圧力の上昇率が指数関数的に増加していることが表示される。</p>
+
+        <p>ハッチがゆっくりと開く。水圧が解放され、異形の影が這い出す。その体は透明な膜で覆われ、内側から発する光が脈打つ。冷たい触覚が金属に触れる度に、船体が微かに震える。水中の気泡が光を屈折させ、異形の輪郭を歪める。桜井はグローブのセンサーを確認し、ケルベロスにデータを送る。「ハッチの状態を確認する。」と短く言う。ケルベロスのディスプレイには、生物の動きを予測するグラフが表示される。グラフの波形は不規則で、生物の速度は徐々に増加している。桜井は手を震わせ、ケルベロスの指示に従う。生物の発する光は青白く、周囲の水を青く染めている。桜井は光の強さを確認し、ケルベロスに伝える。「光の強度を測定する。」と短く言う。</p>
+
+        <p>ケルベロスが緊急モードに切り替わり、船内の照明が赤く点滅する。桜井は立ち上がり、ハッチの方向に移動する。その体は柔らかな光を放ち、周囲の水をゆらめかせる。音はなく、静寂が深まる。桜井は息を殺し、ケルベロスと連携を取る。警報音が断続的に鳴り、船内は緊張に包まれる。ケルベロスが緊急アラートを発し、船内の全システムが最適化される。桜井はグローブのセンサーを確認し、ハッチの近くに移動する。水中の温度が異常に低下し、体温が奪われる。桜井は手袋のセンサーを確認し、ケルベロスに指示を送る。「温度変化を確認する。」と短く言う。</p>
+
+        <p>生物はゆっくりと前進する。その体は柔らかな光を放ち、周囲の水をゆらめかせる。音はなく、静寂が深まる。桜井はグローブのセンサーを確認し、ケルベロスに指示を送る。「移動経路を確認する。」と短く言う。ケルベロスのディスプレイには、生物の動きを予測するグラフが表示される。グラフの波形は不規則で、生物の速度は徐々に増加している。ハッチから数メートル離れた所で、生物の先端が船内の壁に触れる。わずかな振動が伝わり、警報が鳴る。桜井はケルベロスの指示に従い、移動経路を計画する。水中の流れが変わり、異形の生物が新たな動きを見せ始める。桜井は手を伸ばし、グローブのセンサーを確認する。「振動の強さを測定する。」と短く言う。</p>
+
+        <p>生物は静かに動き、船内の暗闇に溶け込む。ケルベロスの警告音が断続的に響き、桜井はグローブのセンサーに集中する。深海の秘密は、まだ明かされていない。水中の流れが変わり、異形の生物が新たな動きを見せ始める。桜井はケルベロスのデータを分析し、対応策を練る。船内は静かだが、緊張が張り詰めている。ケルベロスが緊急モードを解除し、通常モードに戻る。桜井はディスプレイに表示されたデータを確認し、次の行動を考える。ケルベロスが新たな警告を発し、船内のシステムが再び最適化される。桜井はグローブのセンサーを確認し、ケルベロスに指示を送る。「次の対応策を確認する。」と短く言う。</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-4">
+      <div class="chapter-header">
+        <span class="chapter-number">第4章</span>
+        <h2 class="chapter-title">記憶：過去の深海事故の真相</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第4章　記憶：過去の深海事故の真相  </p>
+
+        <p>アーカイブルームの照明は古びた管球の黄色で、ほこりにまみれたファイルケースに影を落としていた。機械の低音が船体を揺らし、ケルベロスのセンサーがデータストリームを読み取るたびに、微かな振動が床を伝わる。温度は摂氏8度を下回り、パーカーの袖で額を覆う桜井の手の平から汗がにじんでいた。  </p>
+
+        <p>ケルベロスは青いレンズをファイルに近づけた。金属音が静寂を破り、モニターの光が赤いラインを描く。桜井は立ち止まり、スーツの袖で目を押さえた。  </p>
+
+        <p>「事故ファイル：アビス-7、日付2047年7月14日」  </p>
+        <p>ケルベロスは画面をスクロールし、画像データを拡大した。  </p>
+        <p>「圧力計の記録が32分間、0.02MPaに固定されています。深度10kmでは不可能な数値です」  </p>
+        <p>「船体の温度センサーからは、氷点下2度の異常値が記録されています。外部との接触はありません」  </p>
+        <p>「ビデオからは、操作室で2人の人間が、機器に向かって笑っているシーンがあります」  </p>
+
+        <p>桜井はモニターに目を向けた。画面には、当時の船長と海洋生物学者が、未知の生物を囲んでいた。  </p>
+        <p>「この生物は、光を吸収する体質です。触れると、圧力が上昇します」  </p>
+        <p>船長が笑い、生物学者が頷いた。  </p>
+        <p>「では、光源を遮れば、観察が可能です」  </p>
+        <p>「分かりました。準備します」  </p>
+
+        <p>ケルベロスはデータを分析し直した。  </p>
+        <p>「光源を遮るための装置が、事故直前に作動しています。しかし、装置の設置位置は、船長の指示と矛盾しています」  </p>
+        <p>「生物学者の心拍数が、事故30秒前に急上昇しています。恐怖か、それとも…」  </p>
+
+        <p>桜井は椅子を揺らし、手を胸に当てた。  </p>
+        <p>「ケルベロス、この生物は、深海の生態系を崩す存在でしたか？」  </p>
+        <p>ケルベロスは沈黙し、画面の赤いラインを指でなぞった。  </p>
+        <p>「圧力データに、生物の動きに合わせた微細な変動が確認されています。船体への影響は、予測以上に深刻です」  </p>
+
+        <p>モニターに、生物が船体に触れた瞬間の映像が流れた。  </p>
+        <p>「体温が急上昇し、船体の金属が変色しています。この変化は、生物の生存を示す反応です」  </p>
+        <p>「船長は、生物を捕獲しようと試みました。しかし、生物の体液が金属を溶かす速度は、想定をはるかに超えています」  </p>
+
+        <p>桜井は目を閉じ、息を止めた。  </p>
+        <p>「ケルベロス、この生物は、何でしたか？」  </p>
+        <p>ケルベロスは微かに光り、画面に表示された文字を読み上げた。  </p>
+        <p>「未知の生物。深海の生態系を維持する役割を持っていた可能性があります。船長の判断は、科学的根拠に基づいていました」  </p>
+
+        <p>アーカイブルームの窓ガラスに、外の海の光が差し込んだ。  </p>
+        <p>ケルベロスはモニターを閉じ、静かに立ち上がった。  </p>
+        <p>「船長の行動は、当時の技術と情報の限界の中で、最善の選択でした。しかし…」  </p>
+        <p>ケルベロスの声が途切れた。  </p>
+        <p>「データには、船長が最後に発した言葉が記録されています。しかし、その内容は、今では理解不能な記号で暗号化されています」  </p>
+
+        <p>桜井は窓の外を見つめた。  </p>
+        <p>「ケルベロス、この生物は、今も生きているのでしょうか？」  </p>
+        <p>ケルベロスは首を横に振った。  </p>
+        <p>「生存の証拠はありません。しかし、深海の環境変化が、過去の事故と関連している可能性があります」  </p>
+
+        <p>照明の黄色い明かりが、ほこりにまみれたファイルを照らしていた。  </p>
+        <p>ケルベロスは再びデータを解析し始めた。  </p>
+        <p>「次は、生物学者の日記を調べてみます。心理的な負荷の記録があるかもしれません」  </p>
+        <p>桜井は立ち上がり、スーツの袖で目を拭った。  </p>
+        <p>「ケルベロス、この記憶を、どうか理解できますか？」  </p>
+        <p>ケルベロスは沈黙し、画面に表示された文字を読み上げた。  </p>
+        <p>「データの解読は、まだ終わりません」</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-5">
+      <div class="chapter-header">
+        <span class="chapter-number">第5章</span>
+        <h2 class="chapter-title">帰還：深海の真実と新たな旅立ち</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第5章　帰還：深海の真実と新たな旅立ち</p>
+
+        <p>海面に近づくにつれ、圧力が体から抜けていく。それはゆっくりと、まるで息を吐くように。水の抵抗が消え、船体は光の帯に包まれた。表層の空気は冷たく、潮の香りが肺に入る。ケルベロスのセンサーが異常なデータを拾う。海中の温度は3度だったが、外気は12度。その差が皮膚を刺す。</p>
+
+        <p>桜井はルミナス・スタッフを海面に向け、光を捉えた。太陽が波に割れ、銀色の筋が水平線から現れる。その光が船の甲板を照らし、反射するたびに、水滴が細かく跳ねる。その音が耳に届く。ビシッ、ビシッと、リズミカルな響き。それは波の高さを物語っていた。</p>
+
+        <p>ケルベロスが足元で光る。その青いレンズが水滴を跳ね返すたびに、微かな振動が甲板を伝わる。桜井は左手のグローブを握りしめ、データパネルに目を落とす。異形生物の記録が一斉に更新される。その目は赤い光を放ち、船内の空気が重くなる。</p>
+
+        <p>「圧力変化のパターンに異常」とケルベロスが告げる。その声は甲板の金属に反響する。桜井は答えない。代わりに、右手で水滴を拭う。その動作が、何かを諦めたように見えた。</p>
+
+        <p>海面が近づくにつれ、波が高くなる。船体が水面を割る瞬間、光が炸裂する。それは水中で見たものと違う。深海の暗闇では、光は鋭く、破壊的だった。表層の光は柔らかく、癒やす。桜井はその変化に胸が詰まる。それは深海の真実を知った時の感覚と似ていた。</p>
+
+        <p>ケルベロスがデータを整理する音が聞こえる。それは機械音ではなく、何かを思考する音のように。桜井はその音に耳を傾け、手を伸ばす。甲板の端に立つと、波しぶきが顔に当たる。その冷たさが、深海で感じたものと同じだった。</p>
+
+        <p>「何かを失った」とケルベロスが低く呟く。その声は静かだが、確信に満ちている。桜井は頷く。深海の底で、何かが起きた。その証拠が、今、水滴となって頬を伝う。</p>
+
+        <p>船がさらに上昇する。空は青く、雲が広がる。その下で、海面が鏡のように光る。桜井はルミナス・スタッフを水に向け、光を投げかけた。その光が水中の何かを照らし出す。それは深海で見た異形生物の形をしていたが、色が違う。深海の暗闇では赤かったが、表層の光では青く輝く。</p>
+
+        <p>ケルベロスがデータを更新する。その数字が変化するたびに、船内の空気が動く。桜井はその動きに合わせ、足を踏みしめる。何かを決意したように。</p>
+
+        <p>「新たな探査が必要」とケルベロスが言う。その声に、桜井は微笑む。深海の真実を知った以上、このまま終わるわけにはいかない。彼はルミナス・スタッフを高く掲げ、光を海に向けた。その光が水面に広がり、波を照らす。</p>
+
+        <p>海面の向こう、太陽が沈もうとしている。その光が船体を包み込む。桜井はその光に手を伸ばし、何かを捉えた。それは水滴ではなく、何か他のもの。それは深海の記憶と、表層の希望が交差する瞬間だった。</p>
+
+        <p>ケルベロスが静かに動き出す。その足音が甲板を伝わり、船の向きを変える。桜井はそれに従い、新たな航路を示す地図を見る。その地図には、深海の真実を解き明かす新たな点が記されていた。</p>
+
+        <p>海面が静かになる。波の音が消え、風が吹き抜ける。その音が、何かを告げる。桜井はルミナス・スタッフを海に向け、光を放つ。その光が水中に消え、何かが反応する。それは深海で感じたものと同じ、微かな振動。</p>
+
+        <p>船は航路を進む。桜井は窓から海を眺め、ケルベロスがデータを更新する音に耳を傾ける。その音が、新たな旅の始まりを告げている。深海の真実を知った以上、このまま終わるわけにはいかない。彼は静かにルミナス・スタッフを握りしめ、次の一歩を踏み出す。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>深海への旅: 闇に潜む真実</p>
+    <p>Generated locally with Local LLM + Stable Diffusion</p>
+  </footer>
+
+
+  </button>
+
+  <button class="mode-toggle" onclick="toggleMode()">🌗 表示切替</button>
+
+  <script>
+    // Reading mode
+    function toggleMode() {
+      document.body.classList.toggle('light');
+    }
+    if (localStorage.getItem('mode') === 'light') document.body.classList.add('light');
+
+    // Scroll progress
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      document.getElementById('progress').style.width = pct + '%';
+    });
+
+    // === TTS (Web Speech API) ===
+
+    document.querySelectorAll('.chapter').forEach((sec, i) => {
+      const b = sec.querySelector('.chapter-body');
+      const t = sec.querySelector('.chapter-title');
+        title: t ? t.textContent : ('Ch.' + (i+1)),
+        text: b.textContent.trim(), el: sec
+      });
+    });
+
+      if (!synth) { alert('Speech not supported'); return; }
+      const sy = window.scrollY + window.innerHeight / 3;
+      let cl = 0;
+    }
+
+      synth.cancel();
+      ch.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Split by Japanese sentence endings for reliable playback
+      const sents = ch.text.match(/[^。！？
+]+[。！？]?/g) || [ch.text];
+      let si = 0;
+
+      function next() {
+        if (si >= sents.length) {
+          return;
+        }
+        const vs = synth.getVoices();
+        const jv = vs.find(v => v.lang && v.lang.startsWith('ja'));
+        if (jv) u.voice = jv;
+        u.onend = () => { si++; next(); };
+        u.onerror = () => { si++; next(); };
+        synth.speak(u);
+      }
+      next();
+    }
+
+      } else {
+      }
+    }
+
+    }
+
+      document.getElementById('ttsSpeedVal').textContent = v + 'x';
+    }
+    if (synth) synth.onvoiceschanged = () => synth.getVoices();
+
+    /* ─── Carousel ─── */
+    (function() {
+      const track = document.getElementById('carouselTrack');
+      if (!track) return;
+      const dots = track.parentElement.querySelectorAll('.carousel-dot');
+      const slides = track.querySelectorAll('.carousel-slide');
+      if (slides.length < 1) return;
+      function updateDots() {
+        const sw = slides[0].offsetWidth + 14;
+        const idx = Math.round(track.scrollLeft / sw);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+      track.addEventListener('scroll', updateDots, { passive: true });
+      dots.forEach(d => d.addEventListener('click', () => {
+        const sw = slides[0].offsetWidth + 14;
+        track.scrollTo({ left: parseInt(d.dataset.idx) * sw, behavior: 'smooth' });
+      }));
+      let paused = false, timer = setInterval(() => {
+        if (paused) return;
+        const sw = slides[0].offsetWidth + 14;
+        const mx = track.scrollWidth - track.clientWidth;
+        const nx = track.scrollLeft + sw;
+        track.scrollTo({ left: nx > mx ? 0 : nx, behavior: 'smooth' });
+      }, 4000);
+      track.addEventListener('touchstart', () => { paused = true; clearInterval(timer); }, { passive: true });
+      track.addEventListener('touchend', () => {
+        paused = false;
+        timer = setInterval(() => {
+          if (paused) return;
+          const sw = slides[0].offsetWidth + 14;
+          const mx = track.scrollWidth - track.clientWidth;
+          const nx = track.scrollLeft + sw;
+          track.scrollTo({ left: nx > mx ? 0 : nx, behavior: 'smooth' });
+        }, 4000);
+      }, { passive: true });
+    })();
+
+  </script>
+</body>
+</html>
